@@ -21,55 +21,28 @@ Paint::Paint(QWidget *parent) :
     ui->graphicsView->setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
 
     scene->setSceneRect(0,0,500,500); // Устанавливаем размер сцены
-    item = new MoveItem(0);
-    item->setPos(0,0);
-    QString str = QString(" %1 , %1 ").arg(item->pos().x()).arg(item->pos().y());
-    ui->label->setText(str);
-    scene->addItem(item);   // Добавляем элемент на графическую сцену
-    connect(this, SIGNAL(isMoving(QMouseEvent*)), item, SLOT(getMoving(QMouseEvent*)));
-    connect(this, SIGNAL(isStoping(QMouseEvent*)), item,  SLOT(getStoping(QMouseEvent*)));
-    connect(this,  SIGNAL(move(QMouseEvent*)), item,  SLOT(moving(QMouseEvent*)));
-    item2 = new MoveItem(50);
-    item2->setPos(0,0);
-    scene->addItem(item2);   // Добавляем элемент на графическую сцену
-    connect(this, SIGNAL(isMoving(QMouseEvent*)), item2, SLOT(getMoving(QMouseEvent*)));
-    connect(this, SIGNAL(isStoping(QMouseEvent*)), item2,  SLOT(getStoping(QMouseEvent*)));
-    connect(this,  SIGNAL(move(QMouseEvent*)), item2,  SLOT(moving(QMouseEvent*)));
-    item3 = new MoveItem(100);
-    item3->setPos(0,0);
-    scene->addItem(item3);   // Добавляем элемент на графическую сцену
-    connect(this, SIGNAL(isMoving(QMouseEvent*)), item3, SLOT(getMoving(QMouseEvent*)));
-    connect(this, SIGNAL(isStoping(QMouseEvent*)), item3,  SLOT(getStoping(QMouseEvent*)));
-    connect(this,  SIGNAL(move(QMouseEvent*)), item3,  SLOT(moving(QMouseEvent*)));
-    item3 = new MoveItem(150);
-    item3->setPos(0,0);
-    scene->addItem(item3);   // Добавляем элемент на графическую сцену
-    connect(this, SIGNAL(isMoving(QMouseEvent*)), item3, SLOT(getMoving(QMouseEvent*)));
-    connect(this, SIGNAL(isStoping(QMouseEvent*)), item3,  SLOT(getStoping(QMouseEvent*)));
-    connect(this,  SIGNAL(move(QMouseEvent*)), item3,  SLOT(moving(QMouseEvent*)));
-    item3 = new MoveItem(200);
-    item3->setPos(0,0);
-    scene->addItem(item3);   // Добавляем элемент на графическую сцену
-    connect(this, SIGNAL(isMoving(QMouseEvent*)), item3, SLOT(getMoving(QMouseEvent*)));
-    connect(this, SIGNAL(isStoping(QMouseEvent*)), item3,  SLOT(getStoping(QMouseEvent*)));
-    connect(this,  SIGNAL(move(QMouseEvent*)), item3,  SLOT(moving(QMouseEvent*)));
-    item4 = new MoveItem(250);
-    item4->setPos(0,0);
-    scene->addItem(item4);   // Добавляем элемент на графическую сцену
-    connect(this, SIGNAL(isMoving(QMouseEvent*)), item4, SLOT(getMoving(QMouseEvent*)));
-    connect(this, SIGNAL(isStoping(QMouseEvent*)), item4,  SLOT(getStoping(QMouseEvent*)));
-    connect(this,  SIGNAL(move(QMouseEvent*)), item4,  SLOT(moving(QMouseEvent*)));
-    item5 = new MoveItem(300);
-    item5->setPos(0,0);
-    scene->addItem(item5);   // Добавляем элемент на графическую сцену
-    connect(this, SIGNAL(isMoving(QMouseEvent*)), item5, SLOT(getMoving(QMouseEvent*)));
-    connect(this, SIGNAL(isStoping(QMouseEvent*)), item5,  SLOT(getStoping(QMouseEvent*)));
-    connect(this,  SIGNAL(move(QMouseEvent*)), item5,  SLOT(moving(QMouseEvent*)));
+    item = this->createItem(item,0);
+    item2 = this->createItem(item2,50);
+    item3 = this->createItem(item3,100);
+    item4 = this->createItem(item4,150);
+    item5 = this->createItem(item5,200);
+    item6 = this->createItem(item6,250);
+    item7 = this->createItem(item7,300);
 }
 
 Paint::~Paint()
 {
     delete ui;
+}
+
+MoveItem* Paint::createItem(MoveItem *item, int angle){
+    item = new MoveItem(angle);
+    item->setPos(0,0);
+    scene->addItem(item);   // Добавляем элемент на графическую сцену
+    connect(this, SIGNAL(isMoving(QMouseEvent*)), item, SLOT(getMoving(QMouseEvent*)));
+    connect(this, SIGNAL(isStoping(QMouseEvent*)), item,  SLOT(getStoping(QMouseEvent*)));
+    connect(this,  SIGNAL(move(QMouseEvent*)), item,  SLOT(moving(QMouseEvent*)));
+    return item;
 }
 
 void Paint::mousePressEvent(QMouseEvent *event){

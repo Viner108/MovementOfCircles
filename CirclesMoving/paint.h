@@ -22,6 +22,7 @@ public:
     explicit Paint(QWidget *parent = 0);
     ~Paint();
     Ui::Paint *ui;
+    MoveItem* createItem(MoveItem *item,int angle);
 
 signals:
     void isMoving(QMouseEvent *event);
@@ -36,6 +37,8 @@ private:
     MoveItem *item3;
     MoveItem *item4;
     MoveItem *item5;
+    MoveItem *item6;
+    MoveItem *item7;
 
 private slots:
     void on_pushButton_clicked();

@@ -2,8 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QPainter>
-#include <QMouseEvent>
+#include <QGraphicsView>
+#include <scene.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -21,19 +21,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QPoint center;
-    QPoint center2;
-    int radius;
-    int angle = 0;
-    QPoint setCenter(int angle);
+    Scene *scene;
+    QGraphicsView *view;
 
-
-private slots:
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
-
-protected:
-void paintEvent(QPaintEvent *event) override;
 };
 #endif // MAINWINDOW_H

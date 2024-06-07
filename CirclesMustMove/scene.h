@@ -14,14 +14,16 @@ private:
     QPointF center2;
     QPointF center3;
     QPointF center4;
+    QPointF center5;
     QPointF press;
-    int radius;
     int angle = 0;
-    int angle2 = 90;
-    int angle3 = 180;
-    int angle4 = 270;
+    int angle2 = 72;
+    int angle3 = 144;
+    int angle4 = 216;
+    int angle5 = 288;
     QPointF setCenter(int &angle, QGraphicsSceneMouseEvent *event);
-    void paintEllipse(QPainter *painter, QPointF centerEllipse, const QBrush &color);
+    void paintEllipse(QPainter *painter, QPointF centerEllipse, const QBrush &color, int diameter = 30);
+    void paintCenter(QPainter *painter, QPointF centerEllipse, int diameter, int angle);
 public:
 
     explicit Scene(QObject *parent = nullptr);

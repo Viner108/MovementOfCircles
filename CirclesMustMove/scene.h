@@ -31,9 +31,17 @@ private:
 
     bool isPress4 = false;
 
-    int countCenters = 4;
+    bool isPress5 = false;
 
-    int countCircles = 16;
+    bool isPress6 = false;
+
+    bool isPress7 = false;
+
+    bool isPress8 = false;
+
+    int countCenters = 8;
+
+    int countCircles = 28;
 
     int countInCircles = 6;
 
@@ -46,6 +54,14 @@ private:
     QPointF center3 = QPointF(225,165);
 
     QPointF center4 = QPointF(-25,165);
+
+    QPointF center5 = QPointF(225,300);
+
+    QPointF center6 = QPointF(-25,35);
+
+    QPointF center7 = QPointF(-25,300);
+
+    QPointF center8 = QPointF(225,35);
 
     QList<QPointF> centersList;
 

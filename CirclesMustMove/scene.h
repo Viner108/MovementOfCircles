@@ -5,28 +5,67 @@
 #include <QPointF>
 #include <QPainter>
 #include <QDebug>
+#include <QList>
+#include <QBrush>
 
 class Scene : public QGraphicsScene {
 
     Q_OBJECT
 private:
-    QPointF center;
-    QPointF center2;
-    QPointF center3;
-    QPointF center4;
-    QPointF center5;
+    QList<QPointF> centersList;
+
+    QList<QPointF> centersActive;
+
+    QList<QBrush> brushList;
+
+    int sizeScene = 400;
+
+    bool isPress1 = false;
+
+    bool isPress2 = false;
+
+    int countCircles = 10;
+
+    int countInCircles = 6;
+
+    int countSections = 4;
+
+    QPointF center = QPointF(100,100);
+
+    QPointF center2 = QPointF(100,230);
+
+    int radius = 80;
+
+    int diameter = 30;
+
+    int fillDegree = 360;
+
+    int changeAngleSpeed = 2;
+
     QPointF press;
-    int angle = 0;
-    int angle2 = 72;
-    int angle3 = 144;
-    int angle4 = 216;
-    int angle5 = 288;
-    QPointF setCenter(int &angle, QGraphicsSceneMouseEvent *event);
-    void paintEllipse(QPainter *painter, QPointF centerEllipse, const QBrush &color, int diameter = 30);
+
+    QList<int> anglesList;
+
+    QPointF setCenter(int &angle, QGraphicsSceneMouseEvent *event, QPointF center);
+
+    void paintEllipse(QPainter *painter, QPointF centerEllipse, const QBrush &color, int angle);
+
     void paintCenter(QPainter *painter, QPointF centerEllipse, int diameter, int angle);
 public:
 
     explicit Scene(QObject *parent = nullptr);
+
+    void paintCircles(QPainter *painter);
+
+    void paintPie(QPainter *painter, int diameter, QPointF centerEllipse, int angle, const QBrush &brush);
+
+    void intersectionCheck();
+
+    void hitTest(QPointF center, bool &isPress);
+
+    void landing(QPointF center);
+
+    void parking();
 
 protected:
     void drawBackground(QPainter *painter, const QRectF &rect) override;

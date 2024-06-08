@@ -7,16 +7,17 @@
 #include <QDebug>
 #include <QList>
 #include <QBrush>
+#include <QMap>
 
 class Scene : public QGraphicsScene {
 
     Q_OBJECT
 private:
-    QList<QPointF> centersList;
+    QMap<int , QPointF> circlesMap;
 
-    QList<QPointF> listForParking;
+    QMap<int , QPointF> mapForParking;
 
-    QList<QPointF> centersActive;
+    QList<int > circlesActive;
 
     QList<QBrush> brushList;
 
@@ -35,6 +36,10 @@ private:
     QPointF center = QPointF(100,100);
 
     QPointF center2 = QPointF(100,230);
+
+    QList<QPointF> centersActive;
+
+    QPointF currentCenter;
 
     int radius = 80;
 
@@ -63,11 +68,15 @@ public:
 
     void intersectionCheck();
 
-    void hitTest(QPointF center, bool &isPress);
+    bool hitTest(QPointF center);
 
     void landing(QPointF center);
 
     void parking();
+
+    void createCirlces(int i);
+
+    void createCircles(int i);
 
 protected:
     void drawBackground(QPainter *painter, const QRectF &rect) override;

@@ -15,7 +15,7 @@ class Scene : public QGraphicsScene {
 private:
     QMap<int , QPointF> circlesMap;
 
-    QMap<int , QPointF> mapForParking;
+    QList<QPointF> mapForParking;
 
     QList<int > circlesActive;
 
@@ -27,7 +27,13 @@ private:
 
     bool isPress2 = false;
 
-    int countCircles = 10;
+    bool isPress3 = false;
+
+    bool isPress4 = false;
+
+    int countCenters = 4;
+
+    int countCircles = 16;
 
     int countInCircles = 6;
 
@@ -35,9 +41,13 @@ private:
 
     QPointF center = QPointF(100,100);
 
-    QPointF center2 = QPointF(100,230);
+    QPointF center2 = QPointF(100,235);
 
-    QList<QPointF> centersActive;
+    QPointF center3 = QPointF(225,165);
+
+    QPointF center4 = QPointF(-25,165);
+
+    QList<QPointF> centersList;
 
     QPointF currentCenter;
 
@@ -74,9 +84,9 @@ public:
 
     void parking();
 
-    void createCirlces(int i);
+    void createCircles(int i, int k);
 
-    void createCircles(int i);
+    void fillColorList();
 
 protected:
     void drawBackground(QPainter *painter, const QRectF &rect) override;

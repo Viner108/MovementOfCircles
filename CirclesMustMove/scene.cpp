@@ -1,40 +1,66 @@
 #include "scene.h"
 
-void Scene::createCircles(int i)
+void Scene::createCircles(int i, int k)
 {
-    double radians = fillDegree/countInCircles*i * M_PI / (fillDegree/2);
-    double newX = center.x() + radius  * cos(radians);
-    double newY = center.y() + radius  * sin(radians);
+    if(k < 2){
+    double radians = fillDegree/countInCircles*(i - (countInCircles * k)) * M_PI / (fillDegree/2);
+    double newX = centersList[k].x() + radius  * cos(radians);
+    double newY = centersList[k].y() + radius  * sin(radians);
     circlesMap.insert(i,QPointF(newX , newY));
     mapForParking.insert(i,QPointF(newX , newY));
-    anglesList.append(fillDegree/countInCircles*i);
+    anglesList.append(fillDegree/countInCircles*(i - (countInCircles * k)));
+    }
+}
+
+void Scene::fillColorList()
+{
+    for (int i = 0; i < 20; ++i) {
+        brushList.append(Qt::green);
+        // brushList.append(Qt::yellow);
+        // brushList.append(Qt::gray);
+        // brushList.append(Qt::blue);
+        // brushList.append(Qt::red);
+        // brushList.append(Qt::black);
+        // brushList.append(Qt::cyan);
+    }
 }
 
 Scene::Scene(QObject *parent)
     : QGraphicsScene(parent)
 {
     setSceneRect(0,0,sizeScene,sizeScene);
+    centersList.append(center);
+    centersList.append(center2);
+    centersList.append(center3);
+    centersList.append(center4);
+    int k = 0;
     for (int i = 0; i < countCircles; ++i) {
-        if(i < countInCircles){
-        createCircles(i);
-        } else{
-        double radians = fillDegree/countInCircles*i * M_PI / (fillDegree/2);
-        double newX2 = center2.x() + radius  * cos(radians);
-        double newY2 = center2.y() + radius  * sin(radians);
-        circlesMap.insert(i,QPointF(newX2 , newY2));
-        mapForParking.insert(i,QPointF(newX2 , newY2));
-        anglesList.append(fillDegree/countInCircles*(i-countInCircles));
+        if(i < 6){
+            k = 0;
+        }else if(i >= 6 && i < 10){
+            k = 1;
+        }else if(i >= 10 && i < 13){
+            k = 2;
+            double radians = fillDegree/countInCircles*(i - (countInCircles * (k)) +1) * M_PI / (fillDegree/2);
+            double newX = centersList[k].x() + radius  * cos(radians);
+            double newY = centersList[k].y() + radius  * sin(radians);
+            circlesMap.insert(i,QPointF(newX , newY));
+            mapForParking.insert(i,QPointF(newX , newY));
+            anglesList.append(fillDegree/countInCircles*(i - (countInCircles * (k)) +1));
         }
+        else if(i >= 13 && i < 16){
+            k = 3;
+            double radians = fillDegree/countInCircles*(i - (countInCircles * (k)) +1) * M_PI / (fillDegree/2);
+            double newX = centersList[k].x() + radius  * cos(radians);
+            double newY = centersList[k].y() + radius  * sin(radians);
+            circlesMap.insert(i,QPointF(newX , newY));
+            mapForParking.insert(i,QPointF(newX , newY));
+            anglesList.append(fillDegree/countInCircles*(i - (countInCircles * (k)) +1));
+        }
+        createCircles(i,k);
+        qDebug() << k;
     }
-    for (int i = 0; i < 3; ++i) {
-        brushList.append(Qt::green);
-        brushList.append(Qt::yellow);
-        brushList.append(Qt::gray);
-        brushList.append(Qt::blue);
-        brushList.append(Qt::red);
-        brushList.append(Qt::black);
-        brushList.append(Qt::cyan);
-    }
+    fillColorList();
 }
 
 void Scene::paintPie(QPainter *painter, int diameter, QPointF centerEllipse, int angle, const QBrush &brush)
@@ -65,12 +91,7 @@ void Scene::drawBackground(QPainter *painter, const QRectF &rect) {
     painter->fillRect(sceneRect(),Qt::white);
 
     for (int i = 0; i < countCircles; ++i) {
-        if(i < 6){
-            this->paintEllipse(painter,circlesMap[i],brushList[i],anglesList[i]);
-        }
-        else{
-            this->paintEllipse(painter,circlesMap[i],brushList[i],anglesList[i-6]);
-        }
+        this->paintEllipse(painter,circlesMap[i],brushList[i],anglesList[i]);
     }
 }
 
@@ -133,8 +154,8 @@ void Scene::parking()
 
     for (int i = 0; i < countCircles; ++i) {
         for (int j = 0; j < countCircles; ++j) {
-            if(circlesMap[i].x() >= mapForParking[j].x()-40 &&circlesMap[i].x() <= mapForParking[j].x()+40){
-                if(circlesMap[i].y() >= mapForParking[j].y()-40 &&circlesMap[i].y() <= mapForParking[j].y()+40){
+            if(circlesMap[i].x() >= mapForParking[j].x()-35 &&circlesMap[i].x() <= mapForParking[j].x()+35){
+                if(circlesMap[i].y() >= mapForParking[j].y()-35 &&circlesMap[i].y() <= mapForParking[j].y()+35){
                     circlesMap[i] = mapForParking[j];
                 }
             }
@@ -149,10 +170,16 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event){
     press = event->scenePos();
     isPress1 = hitTest(center);
     isPress2 = hitTest(center2);
+    isPress3 = hitTest(center3);
+    isPress4 = hitTest(center4);
     if(isPress1){
         currentCenter = center;
     }else if(isPress2){
         currentCenter = center2;
+    }else if(isPress3){
+        currentCenter = center3;
+    }else if(isPress4){
+        currentCenter = center4;
     }
     this->landing(currentCenter);
     qDebug() << press;
@@ -163,6 +190,8 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event){
 void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event){
     isPress1 = false;
     isPress2 = false;
+    isPress3 = false;
+    isPress4 = false;
     qDebug() << "mouseReleaseEvent";
     this->parking();
 }

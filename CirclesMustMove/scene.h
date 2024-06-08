@@ -14,6 +14,8 @@ class Scene : public QGraphicsScene {
 private:
     QList<QPointF> centersList;
 
+    QList<QPointF> listForParking;
+
     QList<QPointF> centersActive;
 
     QList<QBrush> brushList;

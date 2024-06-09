@@ -17,25 +17,27 @@ void Scene::createCircles(int i, int k)
         j = 3;
         break;
     }
-    double radians = fillDegree/countInCircles*(i - (countInCircles * k) + j)  * M_PI / (fillDegree/2);
+    int angle = fillDegree/countInCircles*(i - (countInCircles * k) + j);
+    if (angle <= -fillDegree) {angle += fillDegree;}
+    double radians = angle  * M_PI / (fillDegree/2);
     double newX = centersList[k].x() + radius  * cos(radians);
     double newY = centersList[k].y() + radius  * sin(radians);
     circlesMap.insert(i,QPointF(newX , newY));
     mapForParking.insert(i,QPointF(newX , newY));
-    anglesList.append(fillDegree/countInCircles*(i - (countInCircles * k)));
+    anglesList.append(angle);
 
 }
 
 void Scene::fillColorList()
 {
-    for (int i = 0; i < 50; ++i) {
+    for (int i = 0; i < 10; ++i) {
         brushList.append(Qt::green);
-        // brushList.append(Qt::yellow);
-        // brushList.append(Qt::gray);
-        // brushList.append(Qt::blue);
-        // brushList.append(Qt::red);
-        // brushList.append(Qt::black);
-        // brushList.append(Qt::cyan);
+        brushList.append(Qt::yellow);
+        brushList.append(Qt::gray);
+        brushList.append(Qt::blue);
+        brushList.append(Qt::red);
+        brushList.append(Qt::black);
+        brushList.append(Qt::cyan);
     }
 }
 
@@ -78,7 +80,6 @@ Scene::Scene(QObject *parent)
             k = 7;
         }
         createCircles(i,k);
-        qDebug() << k;
     }
     fillColorList();
 }
@@ -94,7 +95,6 @@ void Scene::paintEllipse(QPainter *painter, QPointF centerEllipse, const QBrush 
     painter->setBrush(color);
     painter->setPen(Qt::SolidLine);
     painter->drawEllipse(centerEllipse,diameter,diameter);
-    qDebug() << "paintEllipse";
     for (int i = 0; i < countSections; ++i) {
         int angleForCenter = (-angle+((fillDegree/countSections)*i)) * 16;
         paintPie(painter, diameter, centerEllipse, angleForCenter,brushList[i]);
@@ -134,9 +134,7 @@ QPointF Scene::setCenter(int &angle, QGraphicsSceneMouseEvent *event, QPointF ce
 
 void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event){
     for (int i = 0; i < circlesActive.size(); ++i) {
-        circlesMap[circlesActive[i]] = this->setCenter(anglesList[i],event, currentCenter);
-        // if(i < 6){
-        // }
+        circlesMap[circlesActive[i]] = this->setCenter(originAngles[i],event, currentCenter);
     }
     update();
 
@@ -155,14 +153,31 @@ bool Scene::hitTest(QPointF center)
     return false;
 }
 
-void Scene::landing(QPointF center)
+int Scene::chooseAngel(QPointF center, QPointF circle){
+    int x = circle.x() - center.x();
+    int y = circle.y() - center.y();
+
+    double angleRadians = qAtan2(y,x);
+
+    if(angleRadians < 0){
+        angleRadians += 2 * M_PI;
+    }
+
+    int angle = qRadiansToDegrees(angleRadians);
+
+    return angle;
+}
+
+void Scene::chooseActiveCircles(QPointF center)
 {
     circlesActive.clear();
+    originAngles.clear();
     for (int i = 0; i < countCircles; ++i) {
         if(circlesMap[i].x() >= center.x()-120 &&circlesMap[i].x() <= center.x()+120){
             if(circlesMap[i].y() >= center.y()- 120 &&circlesMap[i].y() <= center.y()+120){
                 circlesActive.append(i);
                 qDebug() << "BOOOOOOOOOOOO" << i;
+                originAngles.append(this->chooseAngel(center, circlesMap[i]));
             }
         }
     }
@@ -213,7 +228,7 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event){
     }else if(isPress8){
         currentCenter = center8;
     }
-    this->landing(currentCenter);
+    this->chooseActiveCircles(currentCenter);
     qDebug() << press;
     qDebug() << "mousePressEvent";
 

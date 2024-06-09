@@ -8,6 +8,7 @@
 #include <QList>
 #include <QBrush>
 #include <QMap>
+#include <QtMath>
 
 class Scene : public QGraphicsScene {
 
@@ -16,6 +17,8 @@ private:
     QMap<int , QPointF> circlesMap;
 
     QList<QPointF> mapForParking;
+
+    QList<int> originAngles;
 
     QList<int > circlesActive;
 
@@ -96,7 +99,9 @@ public:
 
     bool hitTest(QPointF center);
 
-    void landing(QPointF center);
+    int chooseAngel(QPointF center, QPointF circle);
+
+    void chooseActiveCircles(QPointF center);
 
     void parking();
 
